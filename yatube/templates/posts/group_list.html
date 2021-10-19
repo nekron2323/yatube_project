@@ -1,3 +1,22 @@
 {% extends 'base.html' %}
 {% block title %} {{title}} {% endblock %}
-{% block content %}{{text}}{% endblock %}
+{% block content %}
+<br>
+{%for post in posts%}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">{{post.author.get_full_name}}</h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{post.text}}</p>
+        </div>
+        <div class="card-footer text-muted">
+            {{post.pub_date|date:"d E Y"}}
+            {{post.group}}
+        </div>
+    </div>
+</div>
+<br>
+{% endfor %}
+{% endblock %}

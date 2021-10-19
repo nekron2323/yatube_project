@@ -1,14 +1,25 @@
 {%extends 'base.html'%}
 {% block title %}Main page{% endblock %}
 {% block content %}
-
+<br>
 {%for post in posts%}
-<div class="card">
-    <h5>{{post.author.get_full_name}}</h5>
-    <div class="card-body">
-        <p class="card-text">{{post.text}}</p>
-        <p class="card-footer">{{post.pub_date}}</p>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">{{post.author.get_full_name}}</h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{post.text}}</p>
+        </div>
+        <div class="card-footer text-muted">
+            {{post.pub_date|date:"d E Y"}}
+            {{post.group}}
+        </div>
     </div>
 </div>
+{% if post.group.slug %}
+<a href="{% url 'posts:group_posts_list' post.group.slug%}">Все записи {{post.group}}</a>
+{% endif %}
+<br>
 {% endfor %}
 {% endblock %}
