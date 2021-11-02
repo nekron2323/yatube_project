@@ -8,6 +8,7 @@
                 Зарегистрироваться
             </div>
             <div class="card-body">
+                {% load user_filters %}
                 {% if form.errors %}
                     {% for field in form %}
                         {% for error in field.errors %}
@@ -32,7 +33,7 @@
                                 <span class="required text-danger">*</span>
                             {% endif %}
                             </label>
-                            {{ field }}
+                            {{ field|addclass:'form-control' }}
                             {% if field.help_text %}
                                 <small 
                                     id="{{ field.id_for_label }}-help" 
