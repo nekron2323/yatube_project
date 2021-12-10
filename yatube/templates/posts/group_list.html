@@ -1,26 +1,16 @@
 {% extends 'base.html' %}
 {% block title %}
-  Записи сообщества {{title}}
+  {{ group.title }}
 {% endblock %}
 {% block content %}
-  <br> 
-  {% for post in posts %}
-    <div class="container col-sm-8">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title">{{ post.author.get_full_name }}</h5>
-        </div>
-        <div class="card-body">
-          <p class="card-text">{{ post.text }}</p>
-        </div>
-        <div class="card-footer text-muted">
-          {{ post.pub_date|date:"d E Y" }} 
-          {% if post.group %} 
-            {{ post.group }}
-          {% endif %}
-        </div>
-      </div>
-    </div>
-    <br> 
-  {% endfor %}
+  {% load thumbnail %}
+  <div class="container py-5">
+    <h1>{{ group.title }}</h1>
+    <p>{{ group.description|linebreaksbr }}</p>
+    {% for post in page_obj %}
+      {% include 'posts/includes/post.html' %}           
+      {% if not forloop.last %}<hr>{% endif %}
+    {% endfor %}
+    {% include 'includes/paginator.html' %}
+  </div>
 {% endblock %}

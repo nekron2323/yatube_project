@@ -1,0 +1,59 @@
+{% load thumbnail %}
+<aside {% if is_post_detail %}class="col-12 col-md-3"{% endif %}>
+	<ul {% if is_post_detail %}class="list-group list-group-flush"{% endif %}>
+		<li {% if is_post_detail %}class="list-group-item"{% endif %}>
+			Автор: 
+			<a href="{% url 'posts:profile' post.author.username %}">
+        {% if post.author.get_full_name %}
+          {{ post.author.get_full_name }}
+        {% else %}
+          {{ post.author.username }}
+        {% endif %}
+      </a>
+		</li>
+		<li {% if is_post_detail %}class="list-group-item"{% endif %}>
+      Дата публикации: {{ post.pub_date|date:"d E Y" }}
+    </li>
+    {% if post.group and not is_post_detail and not is_group %}
+    <li {% if is_post_detail %}class="list-group-item"{% endif %}>      
+        Все записи сообщества 
+        <a href="{% url 'posts:group_list' post.group.slug %}">
+          {{ post.group.title }}
+        </a>
+      {% endif %}
+    </li>
+    {% if is_post_detail %}
+    <li class="
+      list-group-item 
+      d-flex 
+      justify-content-between 
+      align-items-center">
+      Всего постов автора:  <span > {{ post.author.posts.count }} </span>
+    </li>
+    {% endif %}
+	</ul>
+  {% if is_post_detail and post.author == user %}
+    <a 
+      class="btn btn-primary my-5" 
+      href="{% url 'posts:post_edit' post.id %}">
+      Редактировать пост
+    </a>
+  {% endif %}
+</aside>
+<article class="col-12 col-md-9">
+	{% thumbnail post.image "960x339" crop="center" upscale=True as im %}
+    <img class="card-img my-2" src="{{ im.url }}">
+  {% endthumbnail %}
+  <p>{{ post.text|linebreaksbr }}</p>
+  {% if is_post_detail %}
+    {% if user.is_authenticated %}
+      {% include 'posts/includes/comment_form.html' %}
+    {% endif %}
+    {% for comment in post.comments.all %}
+      {% include 'posts/includes/comment.html' %}
+    {% endfor %}
+  {% endif %}
+</article>
+{% if not is_post_detail %}
+  <a href="{% url 'posts:post_detail' post.pk %}">Подробнее</a>
+{% endif %}
